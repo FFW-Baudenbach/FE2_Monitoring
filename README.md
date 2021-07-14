@@ -5,14 +5,17 @@ of our local fire department, especially the Alamos FE2-System.
 It checks infrastructure via Ping, HTTP and APIs.
 
 ## Implemented Checks
-✅ FritzBox  
-❌ WindowsPC: Unreachable  
-✅ RaspberryPi  
+(this is also an example output on console and in pushover message)  
+  
+✅ FritzBox Ping  
+✅ FritzBox WebUI  
+❌ WindowsPC Ping: Unreachable  
+✅ RaspberryPi Ping  
 ✅ FE2 directly  
 ✅ FE2 reverse proxy redirect  
 ✅ FE2 via reverse proxy  
 ✅ FE2 via web  
-✅ FE2_Kartengenerierung  
+✅ [FE2_Kartengenerierung](https://github.com/FFW-Baudenbach/FE2_Kartengenerierung) health  
 ✅ FE2_Kartengenerierung generated maps  
 ✅ Printer Ping  
 ✅ Printer WebUI  

@@ -6,9 +6,9 @@ import com.odin568.helper.PingHelper;
 
 import java.util.List;
 
-public class WindowsPC extends PingHelper implements Monitoring
+public class WindowsPC implements Monitoring
 {
     @Override
-    public List<MonitoringResult> check() { return List.of(pingDevice("WindowsPC", "192.168.112.1")); }
+    public List<MonitoringResult> check() { return List.of(PingHelper.pingDevice("WindowsPC Ping", "192.168.112.1")); }
 
 }

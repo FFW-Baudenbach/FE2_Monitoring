@@ -6,9 +6,9 @@ import com.odin568.helper.PingHelper;
 
 import java.util.List;
 
-public class RaspberryPi extends PingHelper implements Monitoring
+public class RaspberryPi implements Monitoring
 {
     @Override
-    public List<MonitoringResult> check() { return List.of(pingDevice("RaspberryPi", "192.168.112.200")); }
+    public List<MonitoringResult> check() { return List.of(PingHelper.pingDevice("RaspberryPi Ping", "192.168.112.200")); }
 
 }
