@@ -32,7 +32,7 @@ public class MonitoringService
     private boolean restoredNotified = false;
     private LocalDateTime lastSuccessOccurred = null;
 
-    private Logger logger = LoggerFactory.getLogger(MonitoringService.class);
+    private final Logger logger = LoggerFactory.getLogger(MonitoringService.class);
 
     @Autowired
     public MonitoringService(PushoverService pushoverService) {
@@ -41,7 +41,7 @@ public class MonitoringService
 
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
     private void sendDailyAlive() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         String msg = "";
         msg += "Status:       " + (somethingHappenedLastDay() ? "WARNING" : "OK") + System.lineSeparator();
         msg += "Last Error:   " + (lastErrorOccurred == null ? "None" : lastErrorOccurred.format(formatter)) + System.lineSeparator();

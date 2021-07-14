@@ -2,7 +2,7 @@ package com.odin568.helper;
 
 public class MonitoringResult {
 
-    public String Device;
+    public final String Device;
     public boolean Healthy;
     public String Information;
 

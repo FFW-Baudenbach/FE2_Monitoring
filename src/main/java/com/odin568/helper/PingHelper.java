@@ -8,7 +8,7 @@ import java.net.InetAddress;
 
 public class PingHelper
 {
-    private static Logger logger = LoggerFactory.getLogger(PingHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(PingHelper.class);
 
     public static MonitoringResult pingDevice(String device, String ip)
     {

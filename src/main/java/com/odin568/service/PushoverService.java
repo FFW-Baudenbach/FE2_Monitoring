@@ -26,7 +26,7 @@ public class PushoverService
 
     private final String token;
     private final String user;
-    private Logger logger = LoggerFactory.getLogger(PingHelper.class);
+    private final Logger logger = LoggerFactory.getLogger(PingHelper.class);
 
     public PushoverService(@Value("${pushover.token}") String token, @Value("${pushover.user}") String user) {
         this.token = token;
@@ -49,7 +49,7 @@ public class PushoverService
             httpPost = new HttpPost("https://api.pushover.net/1/messages.json");
 
 
-            postParameters = new ArrayList<NameValuePair>();
+            postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("token", token));
             postParameters.add(new BasicNameValuePair("user", user));
             postParameters.add(new BasicNameValuePair("message", message));
@@ -57,7 +57,6 @@ public class PushoverService
             postParameters.add(new BasicNameValuePair("priority", priority));
             postParameters.add(new BasicNameValuePair("monospace", "1"));
             postParameters.add(new BasicNameValuePair("timestamp", String.valueOf(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond())));
-
 
             httpPost.setEntity(new UrlEncodedFormEntity(postParameters, "UTF-8"));
 
