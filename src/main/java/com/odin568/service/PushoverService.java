@@ -19,6 +19,9 @@ import java.util.ArrayList;
 @Service
 public class PushoverService
 {
+    @Value("${pushover.enabled:true}")
+    private boolean enabled;
+
     private final String token;
     private final String user;
     private Logger logger = LoggerFactory.getLogger(PingHelper.class);
@@ -30,6 +33,11 @@ public class PushoverService
 
     public boolean sendToPushover(String title, String message, String priority)
     {
+        if (!enabled) {
+            logger.warn("Sending is disabled");
+            return true;
+        }
+
         try {
             HttpClient httpclient;
             HttpPost httpPost;

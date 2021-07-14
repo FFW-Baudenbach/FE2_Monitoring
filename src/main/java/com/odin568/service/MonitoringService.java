@@ -7,6 +7,7 @@ import com.odin568.monitoring.hardware.Router;
 import com.odin568.monitoring.hardware.WindowsPC;
 import com.odin568.monitoring.software.FE2;
 import com.odin568.monitoring.software.FE2_Kartengenerierung;
+import com.odin568.monitoring.software.Website;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +48,10 @@ public class MonitoringService
         results.addAll(new FE2().check());
         results.addAll(new FE2_Kartengenerierung().check());
         results.addAll(new Printer().check());
+        results.addAll(new Website().check());
 
         if (logger.isDebugEnabled())
-            logger.debug(buildMessage(results));
+            logger.debug("Result of run:" + System.lineSeparator() + buildMessage(results));
 
         boolean allUp = results.stream().allMatch(i -> i.Healthy);
         if (allUp) {
@@ -63,6 +65,7 @@ public class MonitoringService
                     errorNotified = false;
                     errorCounter = 0;
                 }
+                restoredCounter--; //Avoid potential overflow
             }
         }
         else {
@@ -70,6 +73,7 @@ public class MonitoringService
                 String message = buildMessage(results);
                 logger.error("Sending Pushover error message...");
                 errorNotified = pushoverService.sendToPushover("Mobile alarm broken", message, "1");
+                errorCounter--; // Avoid potential overflow
             }
         }
 
