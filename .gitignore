@@ -38,4 +38,5 @@ out/
 
 ### Prevent from check-in!!! ###
 *.jar
+!gradle-wrapper.jar
 /ffw/
