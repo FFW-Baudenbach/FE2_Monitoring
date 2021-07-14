@@ -36,5 +36,7 @@ If it recovered more than 5 times in a row, a resolved Pushover message is also 
 ## Note
 
 The Tool is not generalized, all configurations (but secrets of course) are hardcoded.  
-It is designed to be as simple as possible for also not too experienced developers.
+The timings can be configured as well or the defaults are used.  
+  
+The tool is designed to be as simple as possible for also not too experienced developers.
 
