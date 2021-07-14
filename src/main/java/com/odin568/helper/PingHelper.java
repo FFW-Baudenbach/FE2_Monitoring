@@ -18,7 +18,7 @@ public class PingHelper
             InetAddress address = InetAddress.getByName(ip);
             result.Healthy = address.isReachable(5000);
             if (!result.Healthy)
-                result.Information = "Timeout";
+                result.Information = "Unreachable";
         }
         catch (IOException e){
             logger.error("Error pinging device " + device, e);

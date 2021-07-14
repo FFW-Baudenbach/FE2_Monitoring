@@ -6,7 +6,6 @@ RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM adoptopenjdk:16-jre-hotspot-focal
 LABEL maintainer="odin568"
-EXPOSE 8080
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
 COPY --from=builder application/spring-boot-loader/ ./

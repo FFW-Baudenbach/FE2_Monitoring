@@ -24,7 +24,7 @@ public class Printer implements Monitoring
 
         result.add(PingHelper.pingDevice("Printer Ping", "192.168.112.10"));
         result.add(HttpHelper.isSiteUpViaHttp("Printer WebUI", "http://192.168.112.10/sws/index.html", false));
-        result.addAll(checkPrinterStatus("http://192.168.112.10/sws/app/information/home/home.json"));
+        result.addAll(getPrinterStatus("http://192.168.112.10/sws/app/information/home/home.json"));
 
         return result;
     }
@@ -32,7 +32,7 @@ public class Printer implements Monitoring
     /**
      * Documentation about API: https://github.com/nielstron/pysyncthru/issues/35#issuecomment-673392310
      */
-    private List<MonitoringResult> checkPrinterStatus(String apiUrl) {
+    private List<MonitoringResult> getPrinterStatus(String apiUrl) {
 
         var resultList = new ArrayList<MonitoringResult>();
 
@@ -59,7 +59,7 @@ public class Printer implements Monitoring
         MonitoringResult toner = new MonitoringResult("Printer Black Toner");
         int remaining = (Integer)((JSONObject)response.get("toner_black")).get("remaining");
         toner.Healthy = remaining > 10;
-        toner.Information = remaining + "%";
+        toner.Information = remaining + "% remaining";
         resultList.add(toner);
 
         return resultList;
