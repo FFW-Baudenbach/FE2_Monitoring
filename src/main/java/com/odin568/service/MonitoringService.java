@@ -35,7 +35,7 @@ public class MonitoringService
         this.pushoverService = pushoverService;
     }
 
-    @Scheduled(initialDelayString = "${initialDelay:10000}", fixedDelayString = "${fixedDelay:1000}")
+    @Scheduled(initialDelayString = "${initialDelay:10000}", fixedDelayString = "${fixedDelay:60000}")
     private List<MonitoringResult> checkEverything() {
 
         logger.debug("Started checking devices and services.");
@@ -59,7 +59,7 @@ public class MonitoringService
                 String message = buildMessage(results);
                 logger.info("Sending Pushover restored message...");
 
-                if (pushoverService.sendToPushover("Mobile alarm restored", message, "0")) {
+                if (pushoverService.sendToPushover("Problems resolved", message, "0")) {
                     restoredNotified = false;
                     restoredCounter = 0;
                     errorNotified = false;
@@ -72,7 +72,7 @@ public class MonitoringService
             if (!errorNotified && ++errorCounter >= requiredNrRetries) {
                 String message = buildMessage(results);
                 logger.error("Sending Pushover error message...");
-                errorNotified = pushoverService.sendToPushover("Mobile alarm broken", message, "1");
+                errorNotified = pushoverService.sendToPushover("Problem detected", message, "1");
                 errorCounter--; // Avoid potential overflow
             }
         }
