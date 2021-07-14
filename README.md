@@ -2,7 +2,8 @@
 
 The purpose of this Java based tool is to monitor the infrastructure 
 of our local fire department, especially the Alamos FE2-System.  
-It checks infrastructure via Ping, HTTP and APIs.
+It checks infrastructure via Ping, HTTP and APIs.  
+If an error occurred, a [Pushover](https://pushover.net/) message is sent.
 
 ## Implemented Checks
 (this is also an example output on console and in pushover message)  
