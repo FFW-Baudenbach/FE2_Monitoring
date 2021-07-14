@@ -5,21 +5,21 @@ of our local fire department, especially the Alamos FE2-System.
 It checks infrastructure via Ping, HTTP and APIs.
 
 ## Implemented Checks
-✅ | FritzBox  
-✅ | WindowsPC  
-✅ | RaspberryPi  
-✅ | FE2 directly  
-✅ | FE2 reverse proxy redirect  
-✅ | FE2 via reverse proxy  
-✅ | FE2 via web  
-✅ | FE2_Kartengenerierung  
-✅ | FE2_Kartengenerierung generated maps  
-✅ | Printer Ping  
-✅ | Printer WebUI  
-✅ | Printer Device Status: running(2)  
-✅ | Printer Black Toner: 75%  
-✅ | Website  
-✅ | Website redirect  
+✅ FritzBox  
+❌ WindowsPC: Unreachable  
+✅ RaspberryPi  
+✅ FE2 directly  
+✅ FE2 reverse proxy redirect  
+✅ FE2 via reverse proxy  
+✅ FE2 via web  
+✅ FE2_Kartengenerierung  
+✅ FE2_Kartengenerierung generated maps  
+✅ Printer Ping  
+✅ Printer WebUI  
+✅ Printer Device Status: running(2)  
+✅ Printer Black Toner: 75% remaining  
+✅ Website  
+✅ Website redirect  
 
 ## Daily aliveness check
 
