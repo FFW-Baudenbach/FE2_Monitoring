@@ -10,6 +10,10 @@ public class HttpHelper
 {
     public static MonitoringResult isSiteRedirectedToHttps(String device, String url)
     {
+        if (!url.startsWith("http://")) {
+            throw new IllegalArgumentException("Invalid url for device " + device);
+        }
+
         MonitoringResult result = new MonitoringResult(device);
 
         try {
@@ -41,6 +45,10 @@ public class HttpHelper
 
     public static MonitoringResult isSiteUpViaHttp(String device, String url, boolean onlyHead)
     {
+        if (!url.startsWith("http://")) {
+            throw new IllegalArgumentException("Invalid url for device " + device);
+        }
+
         MonitoringResult result = new MonitoringResult(device);
 
         try {
@@ -66,6 +74,10 @@ public class HttpHelper
 
     public static MonitoringResult isSiteUpViaHttps(String device, String url, boolean onlyHead, boolean ignoreCertificateIssues)
     {
+        if (!url.startsWith("https://")) {
+            throw new IllegalArgumentException("Invalid url for device " + device);
+        }
+
         MonitoringResult result = new MonitoringResult(device);
 
         try {

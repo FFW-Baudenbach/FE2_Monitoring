@@ -16,7 +16,9 @@ public class PingHelper
 
         try{
             InetAddress address = InetAddress.getByName(ip);
-            result.Healthy = address.isReachable(10000);
+            result.Healthy = address.isReachable(5000);
+            if (!result.Healthy)
+                result.Information = "Timeout";
         }
         catch (IOException e){
             logger.error("Error pinging device " + device, e);
