@@ -1,0 +1,49 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'idea'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+        vendor = JvmVendorSpec.ADOPTOPENJDK
+    }
+}
+
+jar {
+	enabled = false
+}
+
+// GitHub-Version >> Docker Version >> Fallback
+if (System.getenv("RELEASE_VERSION")) {
+	version = System.getenv("RELEASE_VERSION")
+}
+else if (project.hasProperty("RELEASE_VERSION") && project.getProperty("RELEASE_VERSION") && !project.getProperty("RELEASE_VERSION").allWhitespace) {
+	version = project.getProperty("RELEASE_VERSION")
+}
+else {
+	version = "SNAPSHOT"
+}
+println("Building version $version")
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation group: 'org.json', name: 'json', version: '20210307'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+springBoot {
+	buildInfo()
+}

@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  fe2_monitoring:
+    image: odin568/fe2_monitoring:latest
+    container_name: fe2_monitoring
+    restart: always
+    environment:
+      - INITIALDELAY=10000
+      - FIXEDDELAY=60000
+      - LOGGING_LEVEL_COM_ODIN568=DEBUG
+      - PUSHOVER_TOKEN=addTokenHere
+      - PUSHOVER_USER=addUserHere
