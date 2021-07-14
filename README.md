@@ -16,10 +16,14 @@ It checks infrastructure via Ping, HTTP and APIs.
 ✅ | FE2_Kartengenerierung generated maps  
 ✅ | Printer Ping  
 ✅ | Printer WebUI  
-✅ | Printer Device Status | running(2)  
-✅ | Printer Black Toner | 75%  
+✅ | Printer Device Status: running(2)  
+✅ | Printer Black Toner: 75%  
 ✅ | Website  
 ✅ | Website redirect  
+
+## Daily aliveness check
+
+Sends once in the morning a message about the current state.
 
 ## Pushover notification
 

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 @Service
@@ -53,6 +55,9 @@ public class PushoverService
             postParameters.add(new BasicNameValuePair("message", message));
             postParameters.add(new BasicNameValuePair("title", title));
             postParameters.add(new BasicNameValuePair("priority", priority));
+            postParameters.add(new BasicNameValuePair("monospace", "1"));
+            postParameters.add(new BasicNameValuePair("timestamp", String.valueOf(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond())));
+
 
             httpPost.setEntity(new UrlEncodedFormEntity(postParameters, "UTF-8"));
 
