@@ -75,6 +75,7 @@ public class MonitoringService
         boolean allUp = results.stream().allMatch(i -> i.Healthy);
         if (allUp) {
             lastSuccessOccurred = LocalDateTime.now();
+            errorCounter = 0;
             if (errorNotified && ++restoredCounter >= requiredNrRetries) {
                 logger.info("Sending Pushover restored message...");
                 if (pushoverService.sendToPushover("Problems resolved", buildMessage(results), "0")) {
