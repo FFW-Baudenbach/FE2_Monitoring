@@ -16,18 +16,6 @@ jar {
 	enabled = false
 }
 
-// GitHub-Version >> Docker Version >> Fallback
-if (System.getenv("RELEASE_VERSION")) {
-	version = System.getenv("RELEASE_VERSION")
-}
-else if (project.hasProperty("RELEASE_VERSION") && project.getProperty("RELEASE_VERSION") && !project.getProperty("RELEASE_VERSION").allWhitespace) {
-	version = project.getProperty("RELEASE_VERSION")
-}
-else {
-	version = "SNAPSHOT"
-}
-println("Building version $version")
-
 repositories {
 	mavenCentral()
 }
@@ -42,8 +30,4 @@ dependencies {
 
 test {
 	useJUnitPlatform()
-}
-
-springBoot {
-	buildInfo()
 }
