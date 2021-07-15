@@ -6,9 +6,13 @@ services:
     container_name: fe2_monitoring
     restart: always
     environment:
-      - INITIALDELAY=10000
-      - FIXEDDELAY=60000
-      - ALIVE_CRON=0 0 6 * * *
-      - LOGGING_LEVEL_COM_ODIN568=DEBUG
+      ## The defaults
+      #- INITIALDELAY=10000
+      #- FIXEDDELAY=60000
+      #- ALIVE_CRON=0 0 6 * * *
+      ## Adjust logging
+      #- LOGGING_LEVEL_COM_ODIN568=DEBUG
+      #- LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SCHEDULING=DEBUG
+      - TZ=Europe/Berlin
       - PUSHOVER_TOKEN=addTokenHere
       - PUSHOVER_USER=addUserHere
