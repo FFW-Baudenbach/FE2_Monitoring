@@ -1,9 +1,11 @@
 # FE2_Monitoring
 
-The purpose of this Java based tool is to monitor the infrastructure 
-of our local fire department, especially the Alamos FE2-System.  
-It checks infrastructure via Ping, HTTP and APIs.  
-If an error occurred, a [Pushover](https://pushover.net/) message is sent.
+The purpose of this dockerized Java SpringBoot application is to monitor the infrastructure 
+of our local fire department, especially the [Alamos FE2](https://www.alamos-gmbh.com/service/fe2/)-System.  
+But also specialties like if the printer paper tray is open are checked.   
+The checks are done via Ping, HTTP(S) calls and concrete API usages.  
+If an error occurred, a [Pushover](https://pushover.net/) message is sent. As well, after recovering, another notice is sent.  
+In case everything is down including this monitoring app, we can rely on the external monitoring of Alamos itself.
 
 ## Implemented Checks
 (this is also an example output on console and in pushover message)  
