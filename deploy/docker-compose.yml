@@ -13,6 +13,5 @@ services:
       ## Adjust logging
       #- LOGGING_LEVEL_COM_ODIN568=DEBUG
       #- LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SCHEDULING=DEBUG
-      - TZ=Europe/Berlin
       - PUSHOVER_TOKEN=addTokenHere
       - PUSHOVER_USER=addUserHere
