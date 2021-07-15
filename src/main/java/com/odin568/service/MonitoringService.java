@@ -55,7 +55,7 @@ public class MonitoringService
     {
         //sendDailyAlive(); //DEBUG
 
-        logger.debug("Started checking devices and services.");
+        logger.info("Starting checking devices and services.");
 
         var results = new ArrayList<MonitoringResult>();
 
@@ -67,13 +67,13 @@ public class MonitoringService
         results.addAll(new Printer().check());
         results.addAll(new Website().check());
 
-        if (logger.isDebugEnabled())
-            logger.debug("Result of run:" + System.lineSeparator() + buildMessage(results));
-
         //pushoverService.sendToPushover("TestMessage", buildMessage(results), "0"); //DEBUG
 
         boolean allUp = results.stream().allMatch(i -> i.Healthy);
         if (allUp) {
+            if (logger.isDebugEnabled())
+                logger.debug("Result of run:" + System.lineSeparator() + buildMessage(results));
+
             lastSuccessOccurred = LocalDateTime.now();
             errorCounter = 0;
             if (errorNotified && ++restoredCounter >= requiredNrRetries) {
@@ -88,6 +88,7 @@ public class MonitoringService
             }
         }
         else {
+            logger.warn("Result of run:" + System.lineSeparator() + buildMessage(results));
             lastErrorOccurred = LocalDateTime.now();
             if (!errorNotified && ++errorCounter >= requiredNrRetries) {
                 logger.error("Sending Pushover error message...");
@@ -106,7 +107,7 @@ public class MonitoringService
             logger.debug("======================================");
         }
 
-        logger.debug("Finished checking devices and services.");
+        logger.info("Finished checking devices and services.");
     }
 
     private String buildMessage(ArrayList<MonitoringResult> results)
