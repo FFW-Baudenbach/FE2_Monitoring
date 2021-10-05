@@ -38,6 +38,7 @@ public class FE2 implements Monitoring
         result.addAll(checkInputs());
         result.add(checkCloud());
         result.add(checkMqtt());
+        result.add(checkSystem());
 
         return result;
     }
@@ -235,6 +236,56 @@ public class FE2 implements Monitoring
                     mqttErrors.add("kubernetes");
                 }
                 result.Information = "Error in " + String.join(",", mqttErrors);
+            }
+        }
+
+        return result;
+    }
+
+    private MonitoringResult checkSystem() {
+        var result = new MonitoringResult("FE2 Monitoring - System");
+
+        var systemState = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/system");
+
+        /*
+        {
+          "freeMemory": 5266,
+          "disks": [
+            {
+              "disk": "C:\\",
+              "freeSpace": 177
+            },
+            {
+              "disk": "E:\\",
+              "freeSpace": 15
+            }
+          ]
+        }
+         */
+        if (systemState.isPresent()) {
+            int freeMemory = systemState.get().getInt("freeMemory");
+            int freeSystemSpace = -1;
+            for(var disk : systemState.get().getJSONArray("disks")) {
+                String driveLetter = ((JSONObject) disk).getString("disk");
+                if (driveLetter.startsWith("C")) {
+                    freeSystemSpace = ((JSONObject) disk).getInt("freeSpace");
+                    break;
+                }
+            }
+
+            List<String> systemErrors = new ArrayList<>();
+            if (freeMemory < 1000) {
+                systemErrors.add("Free Memory:" + freeMemory + "GB");
+            }
+            if (freeSystemSpace < 10) {
+                systemErrors.add("Free DiskSpace:" + (freeSystemSpace > 0 ? String.valueOf(freeSystemSpace) : "??") + "GB");
+            }
+
+            if (systemErrors.isEmpty()) {
+                result.Healthy = true;
+            }
+            else {
+                result.Information = String.join(",", systemErrors);
             }
         }
 
