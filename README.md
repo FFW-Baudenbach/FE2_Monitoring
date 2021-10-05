@@ -18,11 +18,11 @@ In case everything is down including this monitoring app, we can rely on the ext
 ✅ FE2 reverse proxy redirect  
 ✅ FE2 via reverse proxy  
 ✅ FE2 via web  
-✅ FE2 Monitoring - Status
-✅ FE2 Monitoring - Inputs
-✅ FE2 Monitoring - Cloud
-✅ FE2 Monitoring - MQTT
-✅ FE2 Monitoring - System
+✅ FE2 Monitoring - Status  
+✅ FE2 Monitoring - Inputs  
+✅ FE2 Monitoring - Cloud  
+✅ FE2 Monitoring - MQTT  
+✅ FE2 Monitoring - System  
 ✅ [FE2_Kartengenerierung](https://github.com/FFW-Baudenbach/FE2_Kartengenerierung) health  
 ✅ FE2_Kartengenerierung generated maps  
 ✅ Printer Ping  
