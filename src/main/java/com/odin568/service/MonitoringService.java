@@ -11,6 +11,7 @@ import com.odin568.monitoring.software.Website;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ import java.util.ArrayList;
 @Service
 public class MonitoringService
 {
+    @Value("${fe2.apiKey}")
+    private String apiKey;
+
     private final PushoverService pushoverService;
     private final int requiredNrRetries = 5;
 
@@ -62,7 +66,7 @@ public class MonitoringService
         results.addAll(new Router().check());
         results.addAll(new WindowsPC().check());
         results.addAll(new RaspberryPi().check());
-        results.addAll(new FE2().check());
+        results.addAll(new FE2(apiKey).check());
         results.addAll(new FE2_Kartengenerierung().check());
         results.addAll(new Printer().check());
         results.addAll(new Website().check());

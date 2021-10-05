@@ -13,5 +13,6 @@ services:
       ## Adjust logging
       #- LOGGING_LEVEL_COM_ODIN568=DEBUG
       #- LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SCHEDULING=DEBUG
+      - FE2_APIKEY=addTokenHere
       - PUSHOVER_TOKEN=addTokenHere
       - PUSHOVER_USER=addUserHere
