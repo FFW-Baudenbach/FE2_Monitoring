@@ -1,10 +1,10 @@
-FROM adoptopenjdk:16-jdk-hotspot-focal AS builder
+FROM eclipse-temurin:17-jdk-focal AS builder
 WORKDIR application
 COPY build/libs/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 
-FROM adoptopenjdk:16-jre-hotspot-focal
+FROM eclipse-temurin:17-jdk-focal
 LABEL maintainer="odin568"
 WORKDIR application
 ENV TZ=Europe/Berlin
