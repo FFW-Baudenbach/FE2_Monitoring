@@ -139,7 +139,7 @@ public class FE2 implements Monitoring
             String id = currInput.getString("id");
             String state = currInput.getString("state");
 
-            if (!"OK".equalsIgnoreCase(state)) {
+            if (!"OK".equalsIgnoreCase(state) && !"NOT_USED".equalsIgnoreCase(state)) {
                 MonitoringResult error = new MonitoringResult("FE2 Monitoring Input " + name);
 
                 var detailedInput = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/input/" + id);
