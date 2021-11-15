@@ -46,8 +46,9 @@ public class MonitoringService
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
     private void sendDailyAlive() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
         String msg = "";
-        msg += "Status:       " + (somethingHappenedLastDay() ? "WARNING" : "OK") + System.lineSeparator();
+        msg += "Status:       " + (isActiveIssue() ? "ERROR" : (somethingHappenedLastDay() ? "WARNING" : "OK")) + System.lineSeparator();
         msg += "Last Error:   " + (lastErrorOccurred == null ? "None" : lastErrorOccurred.format(formatter)) + System.lineSeparator();
         msg += "Last Success: " + (lastSuccessOccurred == null ? "None" : lastSuccessOccurred.format(formatter));
 
@@ -140,6 +141,19 @@ public class MonitoringService
         }
 
         return LocalDateTime.now().minusDays(1).isBefore(lastErrorOccurred);
+    }
+
+    private boolean isActiveIssue() {
+
+        if (lastErrorOccurred == null) {
+            return false;
+        }
+
+        if (lastSuccessOccurred == null) {
+            return true;
+        }
+
+        return lastSuccessOccurred.isBefore(lastErrorOccurred);
     }
 
 }
