@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,6 +43,18 @@ public class MonitoringService
     @Autowired
     public MonitoringService(PushoverService pushoverService) {
         this.pushoverService = pushoverService;
+    }
+
+    @PostConstruct
+    private void onStartup() {
+        logger.info("Application was started.");
+        pushoverService.sendToPushover("FE2_Monitoring Status", "FE2_Monitoring started.", "0");
+    }
+
+    @PreDestroy
+    public void onExit() {
+        logger.info("Application is stopping.");
+        pushoverService.sendToPushover("FE2_Monitoring Status", "FE2_Monitoring stopping.", "0");
     }
 
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
