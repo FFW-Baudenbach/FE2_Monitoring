@@ -4,6 +4,8 @@ services:
   fe2_monitoring:
     image: odin568/fe2_monitoring:latest
     container_name: fe2_monitoring
+    ports:
+      - "8080:8088"
     restart: always
     healthcheck:
       test: curl --insecure --fail http://localhost:8080/actuator/health || exit 1
