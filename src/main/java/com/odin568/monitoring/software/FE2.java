@@ -46,7 +46,7 @@ public class FE2 implements Monitoring
 
     private MonitoringResult checkApi() {
         var result = new MonitoringResult("FE2 Rest - External Status");
-        var output = readObjectFromFe2MonitoringApi("https://haus.ffw-baudenbach.de/rest/status");
+        var output = readObjectFromFe2Api("https://haus.ffw-baudenbach.de/rest/status");
 
         /*
         {
@@ -71,7 +71,7 @@ public class FE2 implements Monitoring
     private MonitoringResult checkStatus() {
         var result = new MonitoringResult("FE2 Monitoring - Status");
 
-        var output = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/status");
+        var output = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/status");
 
         /*
         {
@@ -151,7 +151,7 @@ public class FE2 implements Monitoring
         ]
          */
 
-        var output = readArrayFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/input");
+        var output = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/input");
         if (output.isEmpty()) {
             return List.of(new MonitoringResult("FE2 Monitoring - Inputs"));
         }
@@ -167,7 +167,7 @@ public class FE2 implements Monitoring
             if (!"OK".equalsIgnoreCase(state) && !"NOT_USED".equalsIgnoreCase(state)) {
                 MonitoringResult error = new MonitoringResult("FE2 Monitoring - Input " + name);
 
-                var detailedInput = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/input/" + id);
+                var detailedInput = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/input/" + id);
                 if (detailedInput.isPresent()) {
                     error.Information = detailedInput.get().isNull("message") ? "" : detailedInput.get().getString("message");
                 }
@@ -189,7 +189,7 @@ public class FE2 implements Monitoring
     private MonitoringResult checkCloud() {
         var result = new MonitoringResult("FE2 Monitoring - Cloud");
 
-        var cloudServices = readArrayFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/cloud");
+        var cloudServices = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/cloud");
 
         /*
         [
@@ -238,7 +238,7 @@ public class FE2 implements Monitoring
     private MonitoringResult checkMqtt() {
         var result = new MonitoringResult("FE2 Monitoring - MQTT");
 
-        var brokerStates = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/mqtt");
+        var brokerStates = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/mqtt");
 
         /*
         {
@@ -270,7 +270,7 @@ public class FE2 implements Monitoring
     private MonitoringResult checkSystem() {
         var result = new MonitoringResult("FE2 Monitoring - System");
 
-        var systemState = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/system");
+        var systemState = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/system");
 
         /*
         {
@@ -317,17 +317,17 @@ public class FE2 implements Monitoring
         return result;
     }
 
-    private Optional<JSONObject> readObjectFromFe2MonitoringApi(String url) {
-        var result = readFromFe2MonitoringApi(url);
+    private Optional<JSONObject> readObjectFromFe2Api(String url) {
+        var result = readFromFe2Api(url);
         return result.map(JSONObject::new);
     }
 
-    private Optional<JSONArray> readArrayFromFe2MonitoringApi(String url) {
-        var result = readFromFe2MonitoringApi(url);
+    private Optional<JSONArray> readArrayFromFe2Api(String url) {
+        var result = readFromFe2Api(url);
         return result.map(JSONArray::new);
     }
 
-    private Optional<String> readFromFe2MonitoringApi(String url)
+    private Optional<String> readFromFe2Api(String url)
     {
         try {
             RestTemplate restTemplate = new RestTemplate();
