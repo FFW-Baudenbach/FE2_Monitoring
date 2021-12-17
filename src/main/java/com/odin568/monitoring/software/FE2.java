@@ -29,16 +29,41 @@ public class FE2 implements Monitoring
     {
         var result = new ArrayList<MonitoringResult>();
 
-        result.add(HttpHelper.isSiteUpViaHttp("FE2 directly", "http://192.168.112.1:83/favicon.ico", true));
-        result.add(HttpHelper.isSiteRedirectedToHttps("FE2 reverse proxy redirect", "http://192.168.112.200/favicon.ico"));
-        result.add(HttpHelper.isSiteUpViaHttps("FE2 via reverse proxy", "https://192.168.112.200/favicon.ico", true, true));
-        result.add(HttpHelper.isSiteUpViaHttps("FE2 via web", "https://haus.ffw-baudenbach.de/favicon.ico", true, false));
+        result.add(HttpHelper.isSiteUpViaHttp("FE2 Web - Direct", "http://192.168.112.1:83/favicon.ico", true));
+        result.add(HttpHelper.isSiteUpViaHttps("FE2 Web - Reverse proxy", "https://192.168.112.200/favicon.ico", true, true));
+        result.add(HttpHelper.isSiteRedirectedToHttps("FE2 Web - Http redirect", "http://haus.ffw-baudenbach.de/favicon.ico"));
+        result.add(HttpHelper.isSiteUpViaHttps("FE2 Web - External", "https://haus.ffw-baudenbach.de/favicon.ico", true, false));
 
+        result.add(checkApi());
         result.add(checkStatus());
         result.addAll(checkInputs());
         result.add(checkCloud());
         result.add(checkMqtt());
         result.add(checkSystem());
+
+        return result;
+    }
+
+    private MonitoringResult checkApi() {
+        var result = new MonitoringResult("FE2 Rest - External Status");
+        var output = readObjectFromFe2MonitoringApi("https://haus.ffw-baudenbach.de/rest/status");
+
+        /*
+        {
+           "fe2":"OK",
+           "gae":"OK"
+        }
+         */
+        if (output.isPresent()) {
+            String fe2 = output.get().getString("fe2");
+            String gae = output.get().getString("gae");
+            if (fe2.equalsIgnoreCase("OK") && gae.equalsIgnoreCase("OK")) {
+                result.Healthy = true;
+            }
+            else {
+                result.Information = "FE2: " + fe2 + ", GAE: " + gae;
+            }
+        }
 
         return result;
     }
@@ -61,7 +86,7 @@ public class FE2 implements Monitoring
         }
          */
         if (output.isPresent()) {
-            result.Healthy = output.get().getString("state").equals("OK");
+            result.Healthy = output.get().getString("state").equalsIgnoreCase("OK");
             String msg = output.get().getString("message");
             int nrErrors = output.get().getInt("nbrOfLoggedErrors");
 
@@ -140,7 +165,7 @@ public class FE2 implements Monitoring
             String state = currInput.getString("state");
 
             if (!"OK".equalsIgnoreCase(state) && !"NOT_USED".equalsIgnoreCase(state)) {
-                MonitoringResult error = new MonitoringResult("FE2 Monitoring Input " + name);
+                MonitoringResult error = new MonitoringResult("FE2 Monitoring - Input " + name);
 
                 var detailedInput = readObjectFromFe2MonitoringApi("http://192.168.112.1:83/rest/monitoring/input/" + id);
                 if (detailedInput.isPresent()) {

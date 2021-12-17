@@ -1,12 +1,19 @@
 spring:
   main:
     banner-mode: off
+
 management:
   endpoints:
     web:
       exposure:
-        include: info,health
+        include:
+          - info
+          - health
   endpoint:
-    info:
+    health:
+      show-details: NEVER
+  info:
+    java:
       enabled: true
-      show-details: true
+  security:
+    enabled: false
