@@ -11,9 +11,14 @@ management:
           - health
   endpoint:
     health:
-      show-details: NEVER
+      show-details: ALWAYS
   info:
     java:
       enabled: true
+  health:
+    ping:
+      enabled: true
+    defaults:
+      enabled: false
   security:
     enabled: false

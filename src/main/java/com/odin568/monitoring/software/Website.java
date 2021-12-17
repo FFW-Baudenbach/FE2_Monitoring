@@ -15,8 +15,8 @@ public class Website implements Monitoring
     {
         var result = new ArrayList<MonitoringResult>();
 
-        result.add(HttpHelper.isSiteUpViaHttps("Website", "https://www.ffw-baudenbach.de", true, false));
-        result.add(HttpHelper.isSiteRedirectedToHttps("Website redirect", "http://www.ffw-baudenbach.de"));
+        result.add(HttpHelper.isSiteUpViaHttps("Website - Access", "https://www.ffw-baudenbach.de", true, false));
+        result.add(HttpHelper.isSiteRedirectedToHttps("Website - Http redirect", "http://www.ffw-baudenbach.de"));
 
         return result;
     }

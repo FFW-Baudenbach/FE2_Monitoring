@@ -9,6 +9,6 @@ import java.util.List;
 public class WindowsPC implements Monitoring
 {
     @Override
-    public List<MonitoringResult> check() { return List.of(PingHelper.pingDevice("WindowsPC Ping", "192.168.112.1")); }
+    public List<MonitoringResult> check() { return List.of(PingHelper.pingDevice("WindowsPC - Ping", "192.168.112.1")); }
 
 }

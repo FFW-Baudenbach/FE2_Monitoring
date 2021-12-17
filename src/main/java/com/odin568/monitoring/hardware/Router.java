@@ -14,8 +14,8 @@ public class Router implements Monitoring
     public List<MonitoringResult> check() {
         var result = new ArrayList<MonitoringResult>();
 
-        result.add(PingHelper.pingDevice("FritzBox Ping", "192.168.112.254"));
-        result.add(HttpHelper.isSiteUpViaHttp("FritzBox WebUI", "http://192.168.112.254", true));
+        result.add(PingHelper.pingDevice("FritzBox - Ping", "192.168.112.254"));
+        result.add(HttpHelper.isSiteUpViaHttp("FritzBox - WebUI", "http://192.168.112.254", true));
 
         return result;
     }

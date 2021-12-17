@@ -22,8 +22,8 @@ public class Printer implements Monitoring
     public List<MonitoringResult> check() {
         var result = new ArrayList<MonitoringResult>();
 
-        result.add(PingHelper.pingDevice("Printer Ping", "192.168.112.10"));
-        result.add(HttpHelper.isSiteUpViaHttp("Printer WebUI", "http://192.168.112.10/sws/index.html", false));
+        result.add(PingHelper.pingDevice("Printer - Ping", "192.168.112.10"));
+        result.add(HttpHelper.isSiteUpViaHttp("Printer - WebUI", "http://192.168.112.10/sws/index.html", false));
         result.addAll(getPrinterStatus("http://192.168.112.10/sws/app/information/home/home.json"));
 
         return result;
@@ -41,13 +41,13 @@ public class Printer implements Monitoring
             response = readJsonFromUrl(apiUrl);
         }
         catch (IOException ex) {
-            MonitoringResult result = new MonitoringResult("Printer API");
+            MonitoringResult result = new MonitoringResult("Printer - API");
             result.Information = ex.getClass().getName() + ": " + ex.getMessage();
             return List.of(result);
         }
 
         // Check Status
-        MonitoringResult status = new MonitoringResult("Printer Device Status");
+        MonitoringResult status = new MonitoringResult("Printer - Device Status");
         int deviceStatus = (Integer)((JSONObject)response.get("status")).get("hrDeviceStatus");
         status.Information = getDeviceStatus(deviceStatus);
         if (isDeviceStatusNormal(deviceStatus)) {
@@ -56,7 +56,7 @@ public class Printer implements Monitoring
         resultList.add(status);
 
         // Check black printer cartridge:
-        MonitoringResult toner = new MonitoringResult("Printer Black Toner");
+        MonitoringResult toner = new MonitoringResult("Printer - Black Toner");
         int remaining = (Integer)((JSONObject)response.get("toner_black")).get("remaining");
         toner.Healthy = remaining > 10;
         toner.Information = remaining + "% remaining";

@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Service
-public class MonitoringService
+public class MonitoringService implements HealthIndicator
 {
     @Value("${fe2.apiKey}")
     private String apiKey;
@@ -76,17 +78,7 @@ public class MonitoringService
 
         logger.info("Starting checking devices and services.");
 
-        var results = new ArrayList<MonitoringResult>();
-
-        results.addAll(new Router().check());
-        results.addAll(new WindowsPC().check());
-        results.addAll(new RaspberryPi().check());
-        results.addAll(new FE2(apiKey).check());
-        results.addAll(new FE2_Kartengenerierung().check());
-        results.addAll(new Printer().check());
-        results.addAll(new Website().check());
-
-        //pushoverService.sendToPushover("TestMessage", buildMessage(results), "0"); //DEBUG
+        var results = executeChecks();
 
         boolean allUp = results.stream().allMatch(i -> i.Healthy);
         if (allUp) {
@@ -127,6 +119,21 @@ public class MonitoringService
         }
 
         logger.info("Finished checking devices and services.");
+    }
+
+    private ArrayList<MonitoringResult> executeChecks()
+    {
+        var results = new ArrayList<MonitoringResult>();
+
+        results.addAll(new Router().check());
+        results.addAll(new WindowsPC().check());
+        results.addAll(new RaspberryPi().check());
+        results.addAll(new FE2(apiKey).check());
+        results.addAll(new FE2_Kartengenerierung().check());
+        results.addAll(new Printer().check());
+        results.addAll(new Website().check());
+
+        return results;
     }
 
     private String buildMessage(ArrayList<MonitoringResult> results)
@@ -170,4 +177,11 @@ public class MonitoringService
         return lastSuccessOccurred.isBefore(lastErrorOccurred);
     }
 
+    @Override
+    public Health health() {
+
+        String currentState = (isActiveIssue() ? "ERROR" : (somethingHappenedLastDay() ? "WARNING" : "OK"));
+
+        return Health.up().withDetail("currentState", currentState).build();
+    }
 }
