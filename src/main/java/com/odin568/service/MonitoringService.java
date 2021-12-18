@@ -56,13 +56,13 @@ public class MonitoringService implements HealthIndicator
     @PostConstruct
     private void onStartup() {
         logger.info("Application was started. Mode = " + mode);
-        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring " + mode + " started.", "0");
+        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring started.", "0");
     }
 
     @PreDestroy
     public void onExit() {
         logger.info("Application is stopping.");
-        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring " + mode + " stopped.", "0");
+        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring stopped.", "0");
     }
 
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
