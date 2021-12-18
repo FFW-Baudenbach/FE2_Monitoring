@@ -346,7 +346,8 @@ public class FE2 implements Monitoring
             if (response.getStatusCode() == HttpStatus.OK) {
                 logger.trace("Request Successful.");
                 logger.trace(response.getBody());
-            } else {
+            }
+            else {
                 logger.debug("Request Failed");
                 logger.debug("Statuscode: " + response.getStatusCode());
             }

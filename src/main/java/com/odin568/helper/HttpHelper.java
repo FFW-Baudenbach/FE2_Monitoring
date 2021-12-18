@@ -1,10 +1,15 @@
 package com.odin568.helper;
 
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Optional;
 
 public class HttpHelper
 {
