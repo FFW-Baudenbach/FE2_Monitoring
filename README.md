@@ -5,32 +5,40 @@ of our local fire department, especially the [Alamos FE2](https://www.alamos-gmb
 But also specialties like if the printer paper tray is open are checked.   
 The checks are done via Ping, HTTP(S) calls and concrete API usages.  
 If an error occurred, a [Pushover](https://pushover.net/) message is sent. As well, after recovering, another notice is sent.  
-In case everything is down including this monitoring app, we can rely on the external monitoring of Alamos itself.
+The application can be started in internal and external mode:
+* INTERNAL: Meant to run inside the fire department network and performs the actual checks
+* EXTERNAL: Meant to run externally and only tests the health endpoint of the application from outside to ensure monitoring is running
+
+## Dependencies
+
+Some checks have dependencies to other applications like [FE2_Kartengenerierung](https://github.com/FFW-Baudenbach/FE2_Kartengenerierung)
+and [FE2_ReverseProxy](https://github.com/FFW-Baudenbach/FE2_ReverseProxy).
 
 ## Implemented Checks
 (this is also an example output on console and in pushover message)  
-  
-✅ FritzBox Ping  
-✅ FritzBox WebUI  
-❌ WindowsPC Ping: Unreachable  
-✅ RaspberryPi Ping  
-✅ FE2 directly  
-✅ FE2 reverse proxy redirect  
-✅ FE2 via reverse proxy  
-✅ FE2 via web  
-✅ FE2 Monitoring - Status  
-✅ FE2 Monitoring - Inputs  
-✅ FE2 Monitoring - Cloud  
-✅ FE2 Monitoring - MQTT  
-✅ FE2 Monitoring - System  
-✅ [FE2_Kartengenerierung](https://github.com/FFW-Baudenbach/FE2_Kartengenerierung) health  
-✅ FE2_Kartengenerierung generated maps  
-✅ Printer Ping  
-✅ Printer WebUI  
-✅ Printer Device Status: running(2)  
-✅ Printer Black Toner: 75% remaining  
-✅ Website  
-✅ Website redirect  
+
+✅	FritzBox - Ping  
+✅	FritzBox - WebUI  
+❌	WindowsPC - Ping: Unreachable  
+✅	RaspberryPi - Ping  
+✅	FE2 Web - Direct  
+✅	FE2 Web - Reverse proxy  
+✅	FE2 Web - Http redirect  
+✅	FE2 Web - External  
+✅	FE2 Rest - External Status  
+✅	FE2 Monitoring - Status  
+✅	FE2 Monitoring - Inputs  
+✅	FE2 Monitoring - Cloud  
+✅	FE2 Monitoring - MQTT   
+✅	FE2 Monitoring - System  
+✅	FE2_Kartengenerierung - Health  
+✅	FE2_Kartengenerierung - Maps  
+✅	Printer - Ping  
+✅	Printer - WebUI  
+✅	Printer - Device Status: running(2)  
+✅	Printer - Black Toner: 64% remaining  
+✅	Website - Access  
+✅	Website - Http redirect  
 
 ## Daily aliveness check
 
@@ -40,6 +48,14 @@ Sends once in the morning a message about the current state.
 
 If something goes wrong more than 5 times, a Pushover notification is sent to the admin.  
 If it recovered more than 5 times in a row, a resolved Pushover message is also sent to the admin.
+
+## Health endpoint
+
+Exposes the last state via /actuator/health to enable external monitoring.
+
+## REST API
+
+Exposes the last performed check result via http.
 
 ## Note
 

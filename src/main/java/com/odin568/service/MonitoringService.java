@@ -18,6 +18,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -26,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@RestController
 @Service
 public class MonitoringService implements HealthIndicator
 {
@@ -37,6 +40,8 @@ public class MonitoringService implements HealthIndicator
 
     private final PushoverService pushoverService;
     private final int requiredNrRetries = 5;
+
+    private List<MonitoringResult> lastCheckResult = null;
 
     private long errorCounter = 0;
     private boolean errorNotified = false;
@@ -63,6 +68,11 @@ public class MonitoringService implements HealthIndicator
     public void onExit() {
         logger.info("Application is stopping.");
         pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring stopped.", "0");
+    }
+
+    @GetMapping("/")
+    public String restApi() {
+        return buildHtmlMessage(lastCheckResult);
     }
 
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
@@ -112,6 +122,8 @@ public class MonitoringService implements HealthIndicator
             }
         }
 
+        lastCheckResult = results;
+
         if (logger.isDebugEnabled()) {
             logger.debug("======================================");
             logger.debug("Mode: " + mode);
@@ -160,6 +172,32 @@ public class MonitoringService implements HealthIndicator
             }
             sb.append(System.lineSeparator());
         }
+        return sb.toString().trim();
+    }
+
+    private String buildHtmlMessage(List<MonitoringResult> results)
+    {
+        if (results == null || results.isEmpty()) {
+            return "No results yet";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table>");
+        for(var result : results) {
+            sb.append("<tr>");
+            sb.append("<td>");
+            sb.append((result.Healthy ? "✅" : "❌"));
+            sb.append("</td>");
+            sb.append("<td>");
+            sb.append(result.Device);
+            sb.append("</td>");
+            if (result.Information != null && !result.Information.isEmpty()) {
+                sb.append("<td>");
+                sb.append(result.Information);
+                sb.append("</td>");
+            }
+            sb.append("</tr>");
+        }
+        sb.append("</table>");
         return sb.toString().trim();
     }
 
