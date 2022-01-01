@@ -48,7 +48,7 @@ jobs:
           context: .
           platforms: |
             linux/amd64
-            linux/arm64/v8
+            linux/arm64
             linux/arm/v7
           push: ${{ github.event_name != 'pull_request' }}
           build-args: BUILDX_QEMU_ENV=true
