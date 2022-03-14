@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class FE2 implements Monitoring
 {
@@ -164,13 +161,11 @@ public class FE2 implements Monitoring
             String id = currInput.getString("id");
             String state = currInput.getString("state");
 
-            if (!"OK".equalsIgnoreCase(state) && !"NOT_USED".equalsIgnoreCase(state)) {
+            if (!Arrays.asList("OK", "NOT_USED", "WARN").contains(state.toUpperCase())) {
                 MonitoringResult error = new MonitoringResult("FE2 Monitoring - Input " + name);
 
                 var detailedInput = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/input/" + id);
-                if (detailedInput.isPresent()) {
-                    error.Information = detailedInput.get().isNull("message") ? "" : detailedInput.get().getString("message");
-                }
+                detailedInput.ifPresent(jsonObject -> error.Information = jsonObject.isNull("message") ? state : jsonObject.getString("message"));
 
                 errorResults.add(error);
             }

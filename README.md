@@ -34,7 +34,7 @@ and [FE2_ReverseProxy](https://github.com/FFW-Baudenbach/FE2_ReverseProxy).
 ✅	FE2 Monitoring - System  
 ✅	FE2_Kartengenerierung - Health  
 ✅	FE2_Kartengenerierung - Maps  
-✅ FE2_SmartHome - Health: Actor is ON  
+✅   FE2_SmartHome - Health: Actor is ON  
 ✅	Printer - Ping  
 ✅	Printer - WebUI  
 ✅	Printer - Device Status: running(2)  
