@@ -9,6 +9,10 @@ import java.util.List;
 public class RaspberryPi implements Monitoring
 {
     @Override
-    public List<MonitoringResult> check() { return List.of(PingHelper.pingDevice("RaspberryPi - Ping", "192.168.112.200")); }
+    public List<MonitoringResult> check() {
+        var dockerRaspi = PingHelper.pingDevice("RaspberryPi Docker - Ping", "192.168.112.200");
+        var montitorRaspi = PingHelper.pingDevice("RaspberryPi Monitor - Ping", "192.168.112.201");
+        return List.of(dockerRaspi, montitorRaspi);
+    }
 
 }
