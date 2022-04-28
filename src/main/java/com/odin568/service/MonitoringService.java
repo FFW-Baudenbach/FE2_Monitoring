@@ -16,6 +16,8 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Service
@@ -68,8 +71,9 @@ public class MonitoringService implements HealthIndicator
     }
 
     @GetMapping("/")
-    public String restApi() {
-        return buildHtmlMessage(lastCheckResult);
+    @ResponseBody
+    public String restApi(@RequestParam(name = "darkMode", required = false, defaultValue = "false") boolean darkMode) {
+        return buildHtmlMessage(lastCheckResult, darkMode);
     }
 
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
@@ -80,6 +84,11 @@ public class MonitoringService implements HealthIndicator
         msg += "Status:       " + (isActiveIssue() ? "ERROR" : (somethingHappenedLastDay() ? "WARNING" : "OK")) + System.lineSeparator();
         msg += "Last Error:   " + (lastErrorOccurred == null ? "None" : lastErrorOccurred.format(formatter)) + System.lineSeparator();
         msg += "Last Success: " + (lastSuccessOccurred == null ? "None" : lastSuccessOccurred.format(formatter));
+
+        // In case of error, add details to message
+        if (isActiveIssue()) {
+            msg += System.lineSeparator() + buildMessage(lastCheckResult);
+        }
 
         pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", msg, (somethingHappenedLastDay() ? "0" : "-1"));
     }
@@ -173,13 +182,23 @@ public class MonitoringService implements HealthIndicator
         return sb.toString().trim();
     }
 
-    private String buildHtmlMessage(List<MonitoringResult> results)
+    private String buildHtmlMessage(List<MonitoringResult> results, boolean darkMode)
     {
         if (results == null || results.isEmpty()) {
             return "No results yet";
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("<table>");
+        sb.append("<html>");
+
+        if (darkMode) {
+            sb.append("<body style=\"background-color:#2D3036\">");
+            sb.append("<table style=\"color:#FFFFFF\">");
+        }
+        else {
+            sb.append("<body>");
+            sb.append("<table>");
+        }
+
         for(var result : results) {
             sb.append("<tr>");
             sb.append("<td>");
@@ -196,6 +215,8 @@ public class MonitoringService implements HealthIndicator
             sb.append("</tr>");
         }
         sb.append("</table>");
+        sb.append("</body>");
+        sb.append("</html>");
         return sb.toString().trim();
     }
 
