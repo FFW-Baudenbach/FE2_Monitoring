@@ -191,10 +191,12 @@ public class MonitoringService implements HealthIndicator
 
         if (darkMode) {
             sb.append("<body style=\"background-color:#2D3036\">");
+            sb.append("<h2 style=\"color:#FFFFFF\">System status</h2>");
             sb.append("<table style=\"color:#FFFFFF\">");
         }
         else {
             sb.append("<body>");
+            sb.append("<h2>System status</h2>");
             sb.append("<table>");
         }
 
