@@ -201,13 +201,14 @@ public class MonitoringService implements HealthIndicator
         for(var result : results) {
             sb.append("<tr>");
             sb.append("<td>");
-            sb.append((result.Healthy ? "✅" : "❌"));
+            sb.append((result.Healthy ? "✅&nbsp;" : "❌&nbsp;"));
             sb.append("</td>");
             sb.append("<td>");
             sb.append(result.Device);
             sb.append("</td>");
             if (result.Information != null && !result.Information.isEmpty()) {
                 sb.append("<td>");
+                sb.append("ℹ️&nbsp;");
                 sb.append(result.Information);
                 sb.append("</td>");
             }
