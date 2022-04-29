@@ -69,7 +69,7 @@ public class MonitoringService implements HealthIndicator
         pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring stopped.", "0");
     }
 
-    @GetMapping("/")
+    @GetMapping("/dashboard")
     @ResponseBody
     public String restApi(@RequestParam(name = "darkMode", required = false, defaultValue = "false") boolean darkMode) {
         return buildHtmlMessage(lastCheckResult, darkMode);
