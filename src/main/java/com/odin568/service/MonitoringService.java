@@ -26,13 +26,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Service
 public class MonitoringService implements HealthIndicator
 {
-    @Value("${fe2.apiKey}")
+    @Value("${fe2.apiKey:}")
     private String apiKey;
 
     @Value("${mode}")
