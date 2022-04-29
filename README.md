@@ -27,11 +27,11 @@ and [FE2_ReverseProxy](https://github.com/FFW-Baudenbach/FE2_ReverseProxy).
 ✅	FE2 Web - Http redirect  
 ✅	FE2 Web - External  
 ✅	FE2 Rest - External Status  
-✅	FE2 Monitoring - Status  
-✅	FE2 Monitoring - Inputs  
-✅	FE2 Monitoring - Cloud  
-✅	FE2 Monitoring - MQTT   
-✅	FE2 Monitoring - System  
+✅	FE2 Rest - Monitoring Status  
+✅	FE2 Rest - Monitoring Inputs  
+✅	FE2 Rest - Monitoring Cloud  
+✅	FE2 Rest - Monitoring MQTT   
+✅	FE2 Rest - Monitoring System  
 ✅	FE2_Kartengenerierung - Health  
 ✅	FE2_Kartengenerierung - Maps  
 ✅   FE2_SmartHome - Health: Actor is ON  

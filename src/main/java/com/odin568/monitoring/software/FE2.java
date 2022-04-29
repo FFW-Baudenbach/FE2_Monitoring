@@ -66,7 +66,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkStatus() {
-        var result = new MonitoringResult("FE2 Monitoring - Status");
+        var result = new MonitoringResult("FE2 Rest - Monitoring Status");
 
         var output = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/status");
 
@@ -150,7 +150,7 @@ public class FE2 implements Monitoring
 
         var output = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/input");
         if (output.isEmpty()) {
-            return List.of(new MonitoringResult("FE2 Monitoring - Inputs"));
+            return List.of(new MonitoringResult("FE2 Rest - Monitoring Inputs"));
         }
 
         List<MonitoringResult> errorResults = new ArrayList<>();
@@ -162,7 +162,7 @@ public class FE2 implements Monitoring
             String state = currInput.getString("state");
 
             if (!Arrays.asList("OK", "NOT_USED", "WARN").contains(state.toUpperCase())) {
-                MonitoringResult error = new MonitoringResult("FE2 Monitoring - Input " + name);
+                MonitoringResult error = new MonitoringResult("FE2 Rest - Monitoring Input " + name);
 
                 var detailedInput = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/input/" + id);
                 detailedInput.ifPresent(jsonObject -> error.Information = jsonObject.isNull("message") ? state : jsonObject.getString("message"));
@@ -175,14 +175,14 @@ public class FE2 implements Monitoring
             return errorResults;
         }
 
-        var successResult = new MonitoringResult("FE2 Monitoring - Inputs");
+        var successResult = new MonitoringResult("FE2 Rest - Monitoring Inputs");
         successResult.Healthy = true;
 
         return List.of(successResult);
     }
 
     private MonitoringResult checkCloud() {
-        var result = new MonitoringResult("FE2 Monitoring - Cloud");
+        var result = new MonitoringResult("FE2 Rest - Monitoring Cloud");
 
         var cloudServices = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/cloud");
 
@@ -231,7 +231,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkMqtt() {
-        var result = new MonitoringResult("FE2 Monitoring - MQTT");
+        var result = new MonitoringResult("FE2 Rest - Monitoring MQTT");
 
         var brokerStates = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/mqtt");
 
@@ -263,7 +263,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkSystem() {
-        var result = new MonitoringResult("FE2 Monitoring - System");
+        var result = new MonitoringResult("FE2 Rest - Monitoring System");
 
         var systemState = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/system");
 
