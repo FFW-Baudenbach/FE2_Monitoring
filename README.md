@@ -57,7 +57,7 @@ Exposes the last state via /actuator/health to enable external monitoring.
 
 ## REST API
 
-Exposes the last performed check result via http.
+Exposes the last performed check result via http. Supports parameters for darkMode and fontSize.
 
 ## Note
 

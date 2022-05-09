@@ -71,8 +71,10 @@ public class MonitoringService implements HealthIndicator
 
     @GetMapping("/dashboard")
     @ResponseBody
-    public String restApi(@RequestParam(name = "darkMode", required = false, defaultValue = "false") boolean darkMode) {
-        return buildHtmlMessage(lastCheckResult, darkMode);
+    public String restApi(@RequestParam(name = "darkMode", required = false, defaultValue = "false") boolean darkMode,
+                          @RequestParam(name = "fontSize", required = false, defaultValue = "100") int fontSize)
+    {
+        return buildHtmlMessage(lastCheckResult, darkMode, fontSize);
     }
 
     @Scheduled(cron = "${alive.cron:0 0 6 * * *}")
@@ -181,23 +183,23 @@ public class MonitoringService implements HealthIndicator
         return sb.toString().trim();
     }
 
-    private String buildHtmlMessage(List<MonitoringResult> results, boolean darkMode)
+    private String buildHtmlMessage(List<MonitoringResult> results, boolean darkMode, int size)
     {
         if (results == null || results.isEmpty()) {
             return "No results yet";
         }
+
         StringBuilder sb = new StringBuilder();
         sb.append("<html>");
-
         if (darkMode) {
-            sb.append("<body style=\"background-color:#2D3036\">");
-            sb.append("<h2 style=\"color:#FFFFFF\">System status</h2>");
-            sb.append("<table style=\"color:#FFFFFF\">");
+            sb.append("<body style=\"background-color:#2D3036;font-size:" + size + "%\">");
+            sb.append("<h1 style=\"color:#FFFFFF;font-size:" + size + "%\">System status</h1>");
+            sb.append("<table style=\"color:#FFFFFF;font-size:" + size + "%\">");
         }
         else {
-            sb.append("<body>");
-            sb.append("<h2>System status</h2>");
-            sb.append("<table>");
+            sb.append("<body style=\"font-size:" + size + "%\">");
+            sb.append("<h1 style=\"font-size:" + size + "%\">System status</h1>");
+            sb.append("<table style=\"font-size:" + size + "%\">");
         }
 
         for(var result : results) {
