@@ -25,22 +25,33 @@ public class FE2_SmartHome implements Monitoring
         if (output.isPresent()) {
             var health = output.map(JSONObject::new);
 
-            var obj = health.get()
-                    .getJSONObject("components")
-                    .getJSONObject("switchDeviceService")
-                    .getJSONObject("details");
+            String switchState = getEntryFromHealth(health.get(), "switchDeviceService", "switchState");
+            String switchException = getEntryFromHealth(health.get(), "switchDeviceService", "exception");
+            String lastMotion = getEntryFromHealth(health.get(), "motionDetectorService", "lastMotionDetected");
 
-            if (obj.has("switchState")) {
-                result.Information = "Actor is " + obj.get("switchState").toString();
-                result.Healthy = true;
-            }
-            else if (obj.has("exception")) {
-                result.Information = obj.get("exception").toString();
+            if (switchException != null) {
+                result.Information = switchException;
                 result.Healthy = false;
+            }
+            else {
+                result.Information = "Actor is " + switchState + ".";
+                if (lastMotion != null)
+                    result.Information += " Last motion: " + lastMotion;
+                result.Healthy = true;
             }
         }
 
         return List.of(result);
+    }
+
+    private String getEntryFromHealth(JSONObject input, String component, String detailKey)
+    {
+        try {
+            return input.getJSONObject("components").getJSONObject(component).getJSONObject("details").getString(detailKey);
+        }
+        catch (Exception ex) {
+            return null;
+        }
     }
 
     private Optional<String> getHealth(String url)
