@@ -8,7 +8,7 @@ services:
       - "8088:8080"
     restart: always
     healthcheck:
-      test: curl --insecure --fail http://localhost:8080/actuator/health || exit 1
+      test: curl --insecure --fail http://localhost:8080/actuator/info || exit 1
       interval: 1m
       timeout: 10s
       retries: 3
