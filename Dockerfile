@@ -10,6 +10,10 @@ LABEL maintainer="FFW Baudenbach <webmaster@ffw-baudenbach.de>"
 RUN groupadd --gid 3000 appgroup && \
     useradd -rm -d /home/appuser -s /bin/bash -g appgroup -G sudo -u 1000 appuser
 
+# Ability to run icmp ping commands as non-root
+RUN apt-get update && apt-get install -y libcap2-bin && apt-get clean
+RUN setcap cap_net_raw+eip $JAVA_HOME/bin/java
+
 RUN mkdir application && chown -R appuser:appgroup ./application
 USER appuser
 WORKDIR application
