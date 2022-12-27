@@ -14,7 +14,7 @@ RUN groupadd --gid 3000 appgroup && \
 RUN apt-get update && \
     apt-get install -y libcap2-bin && \
     setcap cap_net_raw+eip $JAVA_HOME/bin/java && \
-    apt-get remove --purge libcap2-bin && \
+    apt-get remove --purge -y libcap2-bin && \
     apt-get clean
 
 RUN mkdir application && chown -R appuser:appgroup ./application
