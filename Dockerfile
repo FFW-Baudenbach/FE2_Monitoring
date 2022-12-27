@@ -1,11 +1,11 @@
-FROM eclipse-temurin:17-jdk-focal AS builder
+FROM eclipse-temurin:17-jdk AS builder
 WORKDIR application
 COPY build/libs/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 
-FROM eclipse-temurin:17-jdk-focal
-LABEL maintainer="odin568"
+FROM eclipse-temurin:17-jre
+LABEL maintainer="FFW Baudenbach <webmaster@ffw-baudenbach.de>"
 WORKDIR application
 ENV TZ=Europe/Berlin
 COPY --from=builder application/dependencies/ ./
