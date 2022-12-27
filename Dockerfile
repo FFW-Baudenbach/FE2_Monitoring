@@ -13,9 +13,9 @@ RUN groupadd --gid 3000 appgroup && \
 # Ability to run icmp ping commands as non-root
 RUN apt-get update && \
     apt-get install -y libcap2-bin && \
-    apt-get clean && \
-    rm -rf /var/cache/apt/lists
-RUN setcap cap_net_raw+eip $JAVA_HOME/bin/java
+    setcap cap_net_raw+eip $JAVA_HOME/bin/java && \
+    apt-get remove --purge libcap2-bin && \
+    apt-get clean
 
 RUN mkdir application && chown -R appuser:appgroup ./application
 USER appuser
