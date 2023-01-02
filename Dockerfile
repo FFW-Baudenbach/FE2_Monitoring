@@ -10,7 +10,7 @@ EXPOSE 8080
 ENV TZ=Europe/Berlin
 
 # Create user/group
-RUN groupadd --gid 3000 appgroup && \
+RUN groupadd --gid 1000 appgroup && \
     useradd -rm -d /home/appuser -s /bin/bash -g appgroup -G sudo -u 1000 appuser
 
 # Ability to run icmp ping commands as non-root

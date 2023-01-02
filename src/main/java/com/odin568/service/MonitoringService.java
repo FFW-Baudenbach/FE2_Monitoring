@@ -60,13 +60,13 @@ public class MonitoringService implements HealthIndicator
     @PostConstruct
     private void onStartup() {
         logger.info("Application was started. Mode = " + mode);
-        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring started.", "0");
+        pushoverService.sendToPushover("FFW " + mode + " Status", "FE2_Monitoring started.", "0");
     }
 
     @PreDestroy
     public void onExit() {
         logger.info("Application is stopping.");
-        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", "FE2_Monitoring stopped.", "0");
+        pushoverService.sendToPushover("FFW " + mode + " Status", "FE2_Monitoring stopped.", "0");
     }
 
     @GetMapping("/dashboard")
@@ -91,7 +91,7 @@ public class MonitoringService implements HealthIndicator
             msg += System.lineSeparator() + buildMessage(lastCheckResult);
         }
 
-        pushoverService.sendToPushover("FE2_Monitoring " + mode + " Status", msg, (somethingHappenedLastDay() ? "0" : "-1"));
+        pushoverService.sendToPushover("FFW " + mode + " Status", msg, (somethingHappenedLastDay() ? "0" : "-1"));
     }
 
     @Scheduled(initialDelayString = "${initialDelay:10000}", fixedDelayString = "${fixedDelay:60000}")
@@ -110,7 +110,7 @@ public class MonitoringService implements HealthIndicator
             errorCounter = 0;
             if (errorNotified && ++restoredCounter >= requiredNrRetries) {
                 logger.info("Sending Pushover restored message...");
-                if (pushoverService.sendToPushover("FE2_Monitoring " + mode + " Resolved", buildMessage(results), "0")) {
+                if (pushoverService.sendToPushover("FFW " + mode + " Resolved", buildMessage(results), "0")) {
                     restoredNotified = false;
                     restoredCounter = 0;
                     errorNotified = false;
@@ -124,7 +124,7 @@ public class MonitoringService implements HealthIndicator
             lastErrorOccurred = LocalDateTime.now();
             if (!errorNotified && ++errorCounter >= requiredNrRetries) {
                 logger.error("Sending Pushover error message...");
-                errorNotified = pushoverService.sendToPushover("FE2_Monitoring " + mode + " Error", buildMessage(results), "1");
+                errorNotified = pushoverService.sendToPushover("FFW " + mode + " Error", buildMessage(results), "1");
                 errorCounter--; // Avoid potential overflow
             }
         }
