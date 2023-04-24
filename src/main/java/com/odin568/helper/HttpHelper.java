@@ -1,6 +1,6 @@
 package com.odin568.helper;
 
-import org.springframework.http.*;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HostnameVerifier;
@@ -8,8 +8,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Optional;
+import java.time.Duration;
 
 public class HttpHelper
 {
@@ -114,4 +113,11 @@ public class HttpHelper
         return (hostname, session) -> true;
     }
 
+    public static RestTemplate getRestTemplate() {
+        RestTemplateBuilder builder = new RestTemplateBuilder();
+        return builder
+                .setConnectTimeout(Duration.ofMillis(5000))
+                .setReadTimeout(Duration.ofMillis(5000))
+                .build();
+    }
 }

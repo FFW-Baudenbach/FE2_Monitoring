@@ -325,7 +325,7 @@ public class FE2 implements Monitoring
     private Optional<String> readFromFe2Api(String url)
     {
         try {
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = HttpHelper.getRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

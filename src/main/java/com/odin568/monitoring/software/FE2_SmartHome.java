@@ -1,5 +1,6 @@
 package com.odin568.monitoring.software;
 
+import com.odin568.helper.HttpHelper;
 import com.odin568.helper.MonitoringResult;
 import com.odin568.monitoring.Monitoring;
 import org.json.JSONObject;
@@ -57,7 +58,7 @@ public class FE2_SmartHome implements Monitoring
     private Optional<String> getHealth(String url)
     {
         try {
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = HttpHelper.getRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
