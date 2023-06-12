@@ -37,6 +37,7 @@ public class FE2 implements Monitoring
         result.add(checkCloud());
         result.add(checkMqtt());
         result.add(checkSystem());
+        result.add(checkAmWeb());
 
         return result;
     }
@@ -306,6 +307,50 @@ public class FE2 implements Monitoring
             }
             else {
                 result.Information = String.join(",", systemErrors);
+            }
+        }
+
+        return result;
+    }
+
+    private MonitoringResult checkAmWeb() {
+        var result = new MonitoringResult("FE2 Rest - Monitoring System");
+
+        var amWebStates = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/amweb");
+
+        /*
+        [
+           {
+              "identifier":"6266ed621abde574fa6fa26c",
+              "connectionState":"OK",
+              "organization":"Admin",
+              "name":"Monitor",
+              "connectionType":"WEBSOCKET",
+              "nbrOfWebSocketConnections":1
+           }
+        ]
+         */
+
+        if (amWebStates.isPresent()) {
+
+            List<String> faultyAmWebs = new ArrayList<>();
+            for (int i = 0; i < amWebStates.get().length(); i++) {
+                JSONObject amWebState = (JSONObject) amWebStates.get().get(i);
+                String name = amWebState.getString("name");
+                String connectionState = amWebState.getString("connectionState");
+                String connectionType = amWebState.getString("connectionType");
+                int nbrOfWebSocketConnections = amWebState.getInt("nbrOfWebSocketConnections");
+
+                if (!"OK".equals(connectionState) || !connectionType.equals("WEBSOCKET") || nbrOfWebSocketConnections < 1) {
+                    faultyAmWebs.add("AMWeb '" + name + "' in state '" + connectionState + "' with type '" + connectionType + "' with " + nbrOfWebSocketConnections + " connection(s)");
+                }
+            }
+
+            if (faultyAmWebs.isEmpty()) {
+                result.Healthy = true;
+            }
+            else {
+                result.Information = String.join(",", faultyAmWebs);
             }
         }
 
