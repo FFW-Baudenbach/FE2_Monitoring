@@ -314,7 +314,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkAmWeb() {
-        var result = new MonitoringResult("FE2 Rest - Monitoring System");
+        var result = new MonitoringResult("FE2 Rest - Monitoring AMweb");
 
         var amWebStates = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/amweb");
 
