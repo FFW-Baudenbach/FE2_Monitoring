@@ -1,5 +1,6 @@
 package com.odin568.monitoring.software;
 
+import com.odin568.helper.HealthState;
 import com.odin568.helper.HttpHelper;
 import com.odin568.helper.MonitoringResult;
 import com.odin568.monitoring.Monitoring;
@@ -56,7 +57,7 @@ public class FE2 implements Monitoring
             String fe2 = output.get().getString("fe2");
             String gae = output.get().getString("gae");
             if (fe2.equalsIgnoreCase("OK") && gae.equalsIgnoreCase("OK")) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 result.Information = "FE2: " + fe2 + ", GAE: " + gae;
@@ -67,7 +68,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkStatus() {
-        var result = new MonitoringResult("FE2 Rest - Monitoring Status");
+        var result = new MonitoringResult("FE2 Rest - Monitoring Status", HealthState.Warning);
 
         var output = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/status");
 
@@ -84,7 +85,7 @@ public class FE2 implements Monitoring
         }
          */
         if (output.isPresent()) {
-            result.Healthy = output.get().getString("state").equalsIgnoreCase("OK");
+            result.HealthState = output.get().getString("state").equalsIgnoreCase("OK") ? HealthState.Healthy : HealthState.Error;
             String msg = output.get().getString("message");
             int nrErrors = output.get().getInt("nbrOfLoggedErrors");
 
@@ -177,13 +178,13 @@ public class FE2 implements Monitoring
         }
 
         var successResult = new MonitoringResult("FE2 Rest - Monitoring Inputs");
-        successResult.Healthy = true;
+        successResult.HealthState = HealthState.Healthy;
 
         return List.of(successResult);
     }
 
     private MonitoringResult checkCloud() {
-        var result = new MonitoringResult("FE2 Rest - Monitoring Cloud");
+        var result = new MonitoringResult("FE2 Rest - Monitoring Cloud", HealthState.Warning);
 
         var cloudServices = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/cloud");
 
@@ -221,7 +222,7 @@ public class FE2 implements Monitoring
             }
 
             if (faultyServices.isEmpty()) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 result.Information = "Error in " + String.join(",", faultyServices);
@@ -247,7 +248,7 @@ public class FE2 implements Monitoring
             boolean kubernetes = "OK".equalsIgnoreCase(brokerStates.get().getString("kubernetes"));
 
             if (defaultBroker && kubernetes) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 List<String> mqttErrors = new ArrayList<>();
@@ -303,7 +304,7 @@ public class FE2 implements Monitoring
             }
 
             if (systemErrors.isEmpty()) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 result.Information = String.join(",", systemErrors);
@@ -347,7 +348,7 @@ public class FE2 implements Monitoring
             }
 
             if (faultyAmWebs.isEmpty()) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 result.Information = String.join(",", faultyAmWebs);

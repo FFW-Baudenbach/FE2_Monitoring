@@ -1,5 +1,6 @@
 package com.odin568.service;
 
+import com.odin568.helper.HealthState;
 import com.odin568.helper.Mode;
 import com.odin568.helper.MonitoringResult;
 import com.odin568.monitoring.hardware.Printer;
@@ -38,7 +39,7 @@ public class MonitoringService implements HealthIndicator
     private Mode mode;
 
     private final PushoverService pushoverService;
-    private final int requiredNrRetries = 5;
+    private final int requiredNrRetries = 10;
 
     private List<MonitoringResult> lastCheckResult = null;
 
@@ -101,7 +102,7 @@ public class MonitoringService implements HealthIndicator
 
         var results = executeChecks();
 
-        boolean allUp = results.stream().allMatch(i -> i.Healthy);
+        boolean allUp = results.stream().allMatch(i -> i.HealthState != HealthState.Error);
         if (allUp) {
             if (logger.isDebugEnabled())
                 logger.debug("Result of " + mode + " run:" + System.lineSeparator() + buildMessage(results));
@@ -171,10 +172,10 @@ public class MonitoringService implements HealthIndicator
     {
         StringBuilder sb = new StringBuilder();
         for(var result : results) {
-            sb.append((result.Healthy ? "✅" : "❌"));
+            sb.append(getIcon(result.HealthState));
             sb.append(" ");
             sb.append(result.Device);
-            if (result.Information != null && result.Information.length() > 0) {
+            if (result.Information != null && !result.Information.isEmpty()) {
                 sb.append(": ");
                 sb.append(result.Information);
             }
@@ -193,19 +194,19 @@ public class MonitoringService implements HealthIndicator
         sb.append("<html>");
         if (darkMode) {
             sb.append("<body style=\"background-color:#2D3036;font-size:" + size + "%\">");
-            sb.append("<h1 style=\"color:#FFFFFF;font-size:" + size + "%\">System status</h1>");
+            sb.append("<h1 style=\"color:#FFFFFF;font-size:" + size*2 + "%\">System status</h1>");
             sb.append("<table style=\"color:#FFFFFF;font-size:" + size + "%\">");
         }
         else {
             sb.append("<body style=\"font-size:" + size + "%\">");
-            sb.append("<h1 style=\"font-size:" + size + "%\">System status</h1>");
+            sb.append("<h1 style=\"font-size:" + size*2 + "%\">System status</h1>");
             sb.append("<table style=\"font-size:" + size + "%\">");
         }
 
         for(var result : results) {
             sb.append("<tr>");
             sb.append("<td>");
-            sb.append((result.Healthy ? "✅&nbsp;" : "❌&nbsp;"));
+            sb.append(getIcon(result.HealthState) + "&nbsp;");
             sb.append("</td>");
             sb.append("<td>");
             sb.append(result.Device);
@@ -234,6 +235,22 @@ public class MonitoringService implements HealthIndicator
         }
 
         return LocalDateTime.now().minusDays(1).isBefore(lastErrorOccurred);
+    }
+
+    private String getIcon(HealthState healthState)
+    {
+        switch (healthState) {
+            case Healthy -> {
+                return "✅";
+            }
+            case Warning -> {
+                return "⚠";
+            }
+            case Error -> {
+                return "❌";
+            }
+        }
+        return "";
     }
 
     private boolean isActiveIssue() {

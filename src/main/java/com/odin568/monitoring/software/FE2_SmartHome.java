@@ -1,5 +1,6 @@
 package com.odin568.monitoring.software;
 
+import com.odin568.helper.HealthState;
 import com.odin568.helper.HttpHelper;
 import com.odin568.helper.MonitoringResult;
 import com.odin568.monitoring.Monitoring;
@@ -32,13 +33,14 @@ public class FE2_SmartHome implements Monitoring
 
             if (switchException != null) {
                 result.Information = switchException;
-                result.Healthy = false;
+                result.HealthState = HealthState.Error;
             }
             else {
                 result.Information = "Actor is " + switchState + ".";
                 if (lastMotion != null)
                     result.Information += " Last motion: " + lastMotion;
-                result.Healthy = true;
+
+                result.HealthState = "none".equalsIgnoreCase(lastMotion) ? HealthState.Warning : HealthState.Healthy;
             }
         }
 

@@ -35,8 +35,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'org.json', name: 'json', version: '20230618'
-	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+	implementation 'org.json:json:20230618'
+	implementation ('org.apache.httpcomponents:httpclient:4.5.14') {
+		exclude group: 'commons-logging'
+	}
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

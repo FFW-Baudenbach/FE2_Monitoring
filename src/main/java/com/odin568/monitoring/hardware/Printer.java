@@ -1,5 +1,6 @@
 package com.odin568.monitoring.hardware;
 
+import com.odin568.helper.HealthState;
 import com.odin568.monitoring.Monitoring;
 import com.odin568.helper.MonitoringResult;
 import com.odin568.helper.HttpHelper;
@@ -51,14 +52,19 @@ public class Printer implements Monitoring
         int deviceStatus = (Integer)((JSONObject)response.get("status")).get("hrDeviceStatus");
         status.Information = getDeviceStatus(deviceStatus);
         if (isDeviceStatusNormal(deviceStatus)) {
-            status.Healthy = true;
+            status.HealthState = HealthState.Healthy;
         }
         resultList.add(status);
 
         // Check black printer cartridge:
         MonitoringResult toner = new MonitoringResult("Printer - Black Toner");
         int remaining = (Integer)((JSONObject)response.get("toner_black")).get("remaining");
-        toner.Healthy = remaining > 10;
+        if (remaining > 20)
+            toner.HealthState = HealthState.Healthy;
+        else if (remaining > 10)
+            toner.HealthState = HealthState.Warning;
+        else
+            toner.HealthState = HealthState.Error;
         toner.Information = remaining + "% remaining";
         resultList.add(toner);
 

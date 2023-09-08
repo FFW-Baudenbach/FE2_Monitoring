@@ -16,13 +16,17 @@ public class PingHelper
 
         try{
             InetAddress address = InetAddress.getByName(ip);
-            result.Healthy = address.isReachable(5000);
-            if (!result.Healthy)
+            if (address.isReachable(5000))
+                result.HealthState = HealthState.Healthy;
+            else
+            {
+                result.HealthState = HealthState.Error;
                 result.Information = "Unreachable";
+            }
         }
         catch (IOException e){
             logger.error("Error pinging device " + device, e);
-            result.Healthy = false;
+            result.HealthState = HealthState.Error;
             result.Information = e.getMessage();
         }
 

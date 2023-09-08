@@ -30,7 +30,7 @@ public class HttpHelper
             if (conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
                 String location = conn.getHeaderField("Location");
                 if (location.startsWith(url.replace("http", "https"))) {
-                    result.Healthy = true;
+                    result.HealthState = HealthState.Healthy;
                 }
                 else {
                     result.Information = "Redirected to " + location;
@@ -64,7 +64,7 @@ public class HttpHelper
             conn.setReadTimeout(10000);
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 result.Information = "Response code: " + conn.getResponseCode();
@@ -97,7 +97,7 @@ public class HttpHelper
             }
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                result.Healthy = true;
+                result.HealthState = HealthState.Healthy;
             }
             else {
                 result.Information = "Response code: " + conn.getResponseCode();

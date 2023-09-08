@@ -3,12 +3,18 @@ package com.odin568.helper;
 public class MonitoringResult {
 
     public final String Device;
-    public boolean Healthy;
+    public HealthState HealthState;
     public String Information;
 
     public MonitoringResult(String device) {
         Device = device;
-        Healthy = false;
+        HealthState = com.odin568.helper.HealthState.Error;
+        Information = "";
+    }
+
+    public MonitoringResult(String device, HealthState defaultState) {
+        Device = device;
+        HealthState = defaultState;
         Information = "";
     }
 }

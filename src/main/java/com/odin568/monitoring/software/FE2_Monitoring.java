@@ -1,5 +1,6 @@
 package com.odin568.monitoring.software;
 
+import com.odin568.helper.HealthState;
 import com.odin568.helper.HttpHelper;
 import com.odin568.helper.MonitoringResult;
 import com.odin568.monitoring.Monitoring;
@@ -34,7 +35,7 @@ public class FE2_Monitoring implements Monitoring
                     .toString();
 
             result.Information = value;
-            result.Healthy = true;
+            result.HealthState = HealthState.Healthy;
         }
 
         return List.of(result);
