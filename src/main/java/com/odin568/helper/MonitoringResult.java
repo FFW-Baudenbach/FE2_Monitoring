@@ -11,10 +11,4 @@ public class MonitoringResult {
         HealthState = com.odin568.helper.HealthState.Error;
         Information = "";
     }
-
-    public MonitoringResult(String device, HealthState defaultState) {
-        Device = device;
-        HealthState = defaultState;
-        Information = "";
-    }
 }

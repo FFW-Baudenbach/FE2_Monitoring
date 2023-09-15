@@ -68,7 +68,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkStatus() {
-        var result = new MonitoringResult("FE2 Rest - Monitoring Status", HealthState.Warning);
+        var result = new MonitoringResult("FE2 Rest - Monitoring Status");
 
         var output = readObjectFromFe2Api("http://192.168.112.1:83/rest/monitoring/status");
 
@@ -85,7 +85,7 @@ public class FE2 implements Monitoring
         }
          */
         if (output.isPresent()) {
-            result.HealthState = output.get().getString("state").equalsIgnoreCase("OK") ? HealthState.Healthy : HealthState.Error;
+            result.HealthState = output.get().getString("state").equalsIgnoreCase("OK") ? HealthState.Healthy : HealthState.Warning;
             String msg = output.get().getString("message");
             int nrErrors = output.get().getInt("nbrOfLoggedErrors");
 
@@ -184,7 +184,7 @@ public class FE2 implements Monitoring
     }
 
     private MonitoringResult checkCloud() {
-        var result = new MonitoringResult("FE2 Rest - Monitoring Cloud", HealthState.Warning);
+        var result = new MonitoringResult("FE2 Rest - Monitoring Cloud");
 
         var cloudServices = readArrayFromFe2Api("http://192.168.112.1:83/rest/monitoring/cloud");
 
@@ -225,6 +225,7 @@ public class FE2 implements Monitoring
                 result.HealthState = HealthState.Healthy;
             }
             else {
+                result.HealthState = HealthState.Warning;
                 result.Information = "Error in " + String.join(",", faultyServices);
             }
         }
