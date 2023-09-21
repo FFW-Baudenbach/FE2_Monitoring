@@ -85,7 +85,19 @@ public class FE2 implements Monitoring
         }
          */
         if (output.isPresent()) {
-            result.HealthState = output.get().getString("state").equalsIgnoreCase("OK") ? HealthState.Healthy : HealthState.Warning;
+            switch(output.get().getString("state"))
+            {
+                case "OK":
+                    result.HealthState = HealthState.Healthy;
+                    break;
+                case "WARN":
+                    result.HealthState = HealthState.Warning;
+                    break;
+                default:
+                    result.HealthState = HealthState.Error;
+                    break;
+            }
+
             String msg = output.get().getString("message");
             int nrErrors = output.get().getInt("nbrOfLoggedErrors");
 
@@ -173,7 +185,7 @@ public class FE2 implements Monitoring
             }
         }
 
-        if (errorResults.size() > 0) {
+        if (!errorResults.isEmpty()) {
             return errorResults;
         }
 
@@ -224,8 +236,12 @@ public class FE2 implements Monitoring
             if (faultyServices.isEmpty()) {
                 result.HealthState = HealthState.Healthy;
             }
-            else {
+            else if (faultyServices.size() == 1 && faultyServices.contains("Kalender")) {
                 result.HealthState = HealthState.Warning;
+                result.Information = "Error in Kalender";
+            }
+            else {
+                result.HealthState = HealthState.Error;
                 result.Information = "Error in " + String.join(",", faultyServices);
             }
         }
