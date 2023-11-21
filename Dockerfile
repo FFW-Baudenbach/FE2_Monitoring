@@ -1,10 +1,10 @@
-FROM eclipse-temurin:17-jdk AS builder
+FROM eclipse-temurin:21-jdk AS builder
 WORKDIR application
 COPY build/libs/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 LABEL maintainer="FFW Baudenbach <webmaster@ffw-baudenbach.de>"
 EXPOSE 8080
 ENV TZ=Europe/Berlin
