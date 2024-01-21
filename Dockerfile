@@ -31,4 +31,4 @@ COPY --chown=appuser:appgroup --from=builder application/snapshot-dependencies/ 
 COPY --chown=appuser:appgroup --from=builder application/application/ ./
 
 # Set entrypoint
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
