@@ -368,6 +368,7 @@ public class FE2 implements Monitoring
                 result.HealthState = HealthState.Healthy;
             }
             else {
+                result.HealthState = HealthState.Warning; // WebSocket connection can break after a while
                 result.Information = String.join(",", faultyAmWebs);
             }
         }
