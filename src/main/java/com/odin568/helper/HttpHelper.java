@@ -7,6 +7,8 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 
@@ -21,7 +23,7 @@ public class HttpHelper
         MonitoringResult result = new MonitoringResult(device);
 
         try {
-            URL site = new URL(url);
+            URL site = new URI(url).toURL();
             HttpURLConnection conn = (HttpURLConnection) site.openConnection();
             conn.setRequestMethod("HEAD");
             conn.setConnectTimeout(10000);
@@ -40,7 +42,7 @@ public class HttpHelper
                 result.Information = "Response code: " + conn.getResponseCode();
             }
         }
-        catch (IOException ex) {
+        catch (IOException | URISyntaxException ex) {
             result.Information = ex.getClass().getName() + ": " + ex.getMessage();
         }
         return result;
@@ -56,7 +58,7 @@ public class HttpHelper
         MonitoringResult result = new MonitoringResult(device);
 
         try {
-            URL site = new URL(url);
+            URL site = new URI(url).toURL();
             HttpURLConnection conn = (HttpURLConnection) site.openConnection();
             if (onlyHead)
                 conn.setRequestMethod("HEAD");
@@ -70,7 +72,7 @@ public class HttpHelper
                 result.Information = "Response code: " + conn.getResponseCode();
             }
         }
-        catch (IOException ex) {
+        catch (IOException | URISyntaxException ex) {
             result.Information = ex.getClass().getName() + ": " + ex.getMessage();
         }
         return result;
@@ -85,7 +87,7 @@ public class HttpHelper
         MonitoringResult result = new MonitoringResult(device);
 
         try {
-            URL site = new URL(url);
+            URL site = new URI(url).toURL();
             HttpsURLConnection conn = (HttpsURLConnection) site.openConnection();
             if (onlyHead)
                 conn.setRequestMethod("HEAD");
@@ -103,7 +105,7 @@ public class HttpHelper
                 result.Information = "Response code: " + conn.getResponseCode();
             }
         }
-        catch (IOException ex) {
+        catch (IOException | URISyntaxException ex) {
             result.Information = ex.getClass().getName() + ": " + ex.getMessage();
         }
         return result;
