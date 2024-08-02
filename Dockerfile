@@ -11,23 +11,22 @@ EXPOSE 8080
 # Set timezone
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Berlin
-RUN apt-get update && apt-get install --no-install-recommends -y tzdata && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --no-install-recommends -y tzdata libcap2-bin && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Create user/group
-RUN groupadd --gid 1001 appgroup && \
-    useradd -rm -d /home/appuser -s /bin/bash -g appgroup -G sudo -u 1001 appuser
+# Ability to run icmp ping commands as non-root
+RUN setcap cap_net_raw+eip $JAVA_HOME/bin/java
 
 # Create and own directory
-RUN mkdir /app && chown -R appuser:appgroup /app
+RUN mkdir /app && chown -R 1000:1000 /app
 USER appuser
 WORKDIR /app
 
 # Copy application from builder stage
-COPY --chown=appuser:appgroup --from=builder /app/dependencies/ ./
-COPY --chown=appuser:appgroup --from=builder /app/spring-boot-loader/ ./
-COPY --chown=appuser:appgroup --from=builder /app/snapshot-dependencies/ ./
-COPY --chown=appuser:appgroup --from=builder /app/application/ ./
+COPY --chown=1000:1000 --from=builder /app/dependencies/ ./
+COPY --chown=1000:1000 --from=builder /app/spring-boot-loader/ ./
+COPY --chown=1000:1000 --from=builder /app/snapshot-dependencies/ ./
+COPY --chown=1000:1000 --from=builder /app/application/ ./
 
 # Set entrypoint
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
