@@ -19,7 +19,7 @@ RUN setcap cap_net_raw+eip $JAVA_HOME/bin/java
 
 # Create and own directory
 RUN mkdir /app && chown -R 1000:1000 /app
-USER appuser
+USER 1000
 WORKDIR /app
 
 # Copy application from builder stage
