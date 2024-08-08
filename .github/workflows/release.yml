@@ -43,7 +43,7 @@ jobs:
 
       - name: Build and push all images
         if: startsWith(github.ref, 'refs/tags/')
-        uses: docker/build-push-action@v6.5.0
+        uses: docker/build-push-action@v6.6.1
         with:
           context: .
           platforms: |
