@@ -1,6 +1,7 @@
 package com.odin568.helper;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HostnameVerifier;
@@ -10,7 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.Duration;
 
 public class HttpHelper
 {
@@ -118,8 +118,12 @@ public class HttpHelper
     public static RestTemplate getRestTemplate() {
         RestTemplateBuilder builder = new RestTemplateBuilder();
         return builder
-                .setConnectTimeout(Duration.ofMillis(5000))
-                .setReadTimeout(Duration.ofMillis(5000))
+                .requestFactory(() -> {
+                    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+                    factory.setConnectTimeout(5000);
+                    factory.setReadTimeout(5000);
+                    return factory;
+                })
                 .build();
     }
 }

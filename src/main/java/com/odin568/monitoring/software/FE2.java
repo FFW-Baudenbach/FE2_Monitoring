@@ -15,7 +15,7 @@ import java.util.*;
 
 public class FE2 implements Monitoring
 {
-    private String apiKey;
+    private final String apiKey;
     private final Logger logger = LoggerFactory.getLogger(FE2.class);
 
     public FE2(final String apiKey) {
@@ -99,12 +99,17 @@ public class FE2 implements Monitoring
             }
 
             String msg = output.get().getString("message");
-            int nrErrors = output.get().getInt("nbrOfLoggedErrors");
 
             result.Information = msg.trim();
-            if (nrErrors > 0) {
-                result.Information += " (" + nrErrors + " Errors in Log)";
+
+            if (output.get().has("nbrOfLoggedErrors"))
+            {
+                int nrErrors = output.get().getInt("nbrOfLoggedErrors");
+                if (nrErrors > 0) {
+                    result.Information += " (" + nrErrors + " Errors in Log)";
+                }
             }
+
         }
 
         return result;
@@ -302,7 +307,7 @@ public class FE2 implements Monitoring
         }
          */
         if (systemState.isPresent()) {
-            int freeMemory = systemState.get().getInt("freeMemory");
+            List<String> systemErrors = new ArrayList<>();
             int freeSystemSpace = -1;
             for(var disk : systemState.get().getJSONArray("disks")) {
                 String driveLetter = ((JSONObject) disk).getString("disk");
@@ -311,13 +316,16 @@ public class FE2 implements Monitoring
                     break;
                 }
             }
-
-            List<String> systemErrors = new ArrayList<>();
-            if (freeMemory < 1000) {
-                systemErrors.add("Free Memory:" + freeMemory + "GB");
-            }
             if (freeSystemSpace < 10) {
                 systemErrors.add("Free DiskSpace:" + (freeSystemSpace > 0 ? String.valueOf(freeSystemSpace) : "??") + "GB");
+            }
+
+            if (systemState.get().has("freeMemory"))
+            {
+                int freeMemory = systemState.get().getInt("freeMemory");
+                if (freeMemory < 1000) {
+                    systemErrors.add("Free Memory:" + freeMemory + "GB");
+                }
             }
 
             if (systemErrors.isEmpty()) {
