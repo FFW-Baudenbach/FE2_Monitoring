@@ -4,7 +4,7 @@ COPY build/libs/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:21-jdk-jammy
 LABEL maintainer="FFW Baudenbach <webmaster@ffw-baudenbach.de>"
 EXPOSE 8080
 
