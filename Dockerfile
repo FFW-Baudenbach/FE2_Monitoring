@@ -1,9 +1,9 @@
-FROM eclipse-temurin:21-jdk-noble AS builder
+FROM eclipse-temurin:25-jdk-noble AS builder
 WORKDIR /app
 COPY build/libs/*.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --launcher
 
-FROM eclipse-temurin:21-jre-noble
+FROM eclipse-temurin:25-jre-noble
 LABEL maintainer="FFW Baudenbach <webmaster@ffw-baudenbach.de>"
 EXPOSE 8080
 
