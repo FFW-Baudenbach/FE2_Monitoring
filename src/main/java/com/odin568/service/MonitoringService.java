@@ -8,12 +8,13 @@ import com.odin568.monitoring.hardware.RaspberryPi;
 import com.odin568.monitoring.hardware.Router;
 import com.odin568.monitoring.hardware.WindowsPC;
 import com.odin568.monitoring.software.*;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.health.contributor.Health;
+import org.springframework.boot.health.contributor.HealthIndicator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -267,7 +268,7 @@ public class MonitoringService implements HealthIndicator
     }
 
     @Override
-    public Health health() {
+    public @Nullable Health health() {
 
         String currentState = (isActiveIssue() ? "ERROR" : (somethingHappenedLastDay() ? "WARNING" : "OK"));
 

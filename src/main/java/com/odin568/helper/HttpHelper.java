@@ -1,6 +1,5 @@
 package com.odin568.helper;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -115,15 +114,12 @@ public class HttpHelper
         return (hostname, session) -> true;
     }
 
+
     public static RestTemplate getRestTemplate() {
-        RestTemplateBuilder builder = new RestTemplateBuilder();
-        return builder
-                .requestFactory(() -> {
-                    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-                    factory.setConnectTimeout(5000);
-                    factory.setReadTimeout(5000);
-                    return factory;
-                })
-                .build();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(5000);
+        factory.setReadTimeout(5000);
+
+        return new RestTemplate(factory);
     }
 }
